@@ -401,9 +401,8 @@ async function sendAudioForTranscription(audioBlob, voiceSettings) {
 
         console.log('Sending audio for transcription...');
 
-        // Send to backend transcription endpoint
-        const backendUrl = window.location.protocol === 'https:' ? 'https://localhost:8000' : 'http://localhost:8000';
-        const response = await fetch(`${backendUrl}/api/voice/transcribe`, {
+        // Send to frontend proxy endpoint (which forwards to backend)
+        const response = await fetch('/api/voice/transcribe', {
             method: 'POST',
             body: formData
         });

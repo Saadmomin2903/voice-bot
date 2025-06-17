@@ -7,7 +7,7 @@ from fasthtml.common import *
 import logging
 from datetime import datetime
 from typing import Optional
-from fastapi import HTTPException
+from fastapi import HTTPException, UploadFile
 import html
 
 # Configure logging
@@ -406,6 +406,36 @@ async def get():
             "error": str(e),
             "service": "Backend Health Check"
         }
+
+@rt("/api/voice/transcribe")
+async def post(audio_file: UploadFile, language: str = "en-US"):
+    """Proxy STT requests to backend"""
+    try:
+        from utils.api_client import api_client
+
+        logger.info(f"STT proxy called with file: {audio_file.filename if audio_file else 'None'}")
+
+        if not audio_file or not audio_file.filename:
+            logger.error("No audio file provided to STT proxy")
+            return {"error": "No audio file provided"}
+
+        # Read audio data
+        audio_data = await audio_file.read()
+        logger.info(f"Audio data size: {len(audio_data)} bytes")
+
+        # Call backend STT
+        result = await api_client.transcribe_audio(audio_data, language)
+
+        if result['success']:
+            logger.info("STT proxy successful")
+            return result['data']
+        else:
+            logger.error(f"STT proxy backend error: {result['error']}")
+            return {"error": result['error']}
+
+    except Exception as e:
+        logger.error(f"STT proxy failed: {e}")
+        return {"error": str(e)}
 
 
 
