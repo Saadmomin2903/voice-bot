@@ -31,24 +31,36 @@ def signal_handler(signum, frame):
 def start_backend():
     """Start FastAPI backend on internal port (no SSL)"""
     print(f"🚀 Starting FastAPI backend on port {BACKEND_PORT}...")
-    
+
     backend_dir = Path(__file__).parent / "backend"
     os.chdir(backend_dir)
-    
+
+    # First run the FastAPI test
+    print("🔍 Running FastAPI compatibility test...")
+    test_cmd = [sys.executable, "test_fastapi.py"]
+    test_result = subprocess.run(test_cmd, capture_output=True, text=True)
+    print("Test output:")
+    print(test_result.stdout)
+    if test_result.stderr:
+        print("Test errors:")
+        print(test_result.stderr)
+
     # Set environment for backend (disable SSL for internal communication)
     env = os.environ.copy()
     env["PORT"] = str(BACKEND_PORT)
     env["HOST"] = "127.0.0.1"  # Internal only
     env["USE_SSL"] = "false"  # Disable SSL for internal backend
     env["USE_HTTPS"] = "false"
-    
+
     cmd = [
         sys.executable, "-m", "uvicorn", "main_clean:app",
         "--host", "127.0.0.1",
         "--port", str(BACKEND_PORT),
-        "--workers", "1"
+        "--workers", "1",
+        "--proxy-headers", "false",
+        "--forwarded-allow-ips", ""
     ]
-    
+
     process = subprocess.Popen(cmd, env=env)
     processes.append(process)
     return process
