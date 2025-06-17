@@ -16,6 +16,10 @@ logger = logging.getLogger(__name__)
 
 app, rt = fast_app(
     hdrs=(
+        # Google Fonts
+        Link(rel="preconnect", href="https://fonts.googleapis.com"),
+        Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=True),
+        Link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"),
         # Include HTMX for real-time updates
         Script(src="https://unpkg.com/htmx.org@1.9.10"),
         # Include our custom JavaScript
@@ -25,6 +29,7 @@ app, rt = fast_app(
         Link(rel="stylesheet", href="/static/styles.css"),
         # Meta tags
         Meta(name="viewport", content="width=device-width, initial-scale=1.0"),
+        Meta(name="theme-color", content="#0f0f23"),
     )
 )
 
@@ -48,10 +53,11 @@ FASTAPI_HTTP_URL = os.getenv("FASTAPI_HTTP_URL", f"{PROTOCOL}://{BACKEND_HOST}:{
 @rt("/")
 def get():
     """Main voice bot interface"""
-    return Titled("Voice Bot",
+    return Titled("AI Voice Assistant",
         Div(
             # Header
             Header(
+                H1("AI Voice Assistant", cls="header-title"),
                 P("Real-time voice conversations with AI", cls="header-subtitle"),
                 cls="app-header"
             ),
@@ -77,7 +83,8 @@ def get():
                             cls="message-input"
                         ),
                         Button(
-                            "Send", 
+                            Span("📤", cls="button-icon"),
+                            Span("Send", cls="button-text"),
                             id="send-btn",
                             cls="send-button",
                             hx_post="/send-message",
@@ -91,13 +98,15 @@ def get():
                     # Voice controls
                     Div(
                         Button(
-                            "🎤 Start Recording",
+                            Span("🎤", cls="button-icon"),
+                            Span("Start Recording", cls="button-text"),
                             id="record-btn",
                             cls="voice-button",
                             onclick="toggleRecording()"
                         ),
                         Button(
-                            "⏹️ Stop",
+                            Span("⏹️", cls="button-icon"),
+                            Span("Stop Recording", cls="button-text"),
                             id="stop-btn",
                             cls="voice-button stop-button",
                             style="display: none;",
