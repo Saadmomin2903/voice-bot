@@ -43,7 +43,7 @@ def start_backend():
     env["USE_HTTPS"] = "false"
     
     cmd = [
-        sys.executable, "-m", "uvicorn", "main:app",
+        sys.executable, "-m", "uvicorn", "main_minimal:app",
         "--host", "127.0.0.1",
         "--port", str(BACKEND_PORT),
         "--workers", "1"
