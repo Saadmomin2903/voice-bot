@@ -17,28 +17,38 @@ class GroqClient:
     def __init__(self, api_key: Optional[str] = None):
         # Use secure API key manager for validation
         try:
+            logger.info("Initializing Groq client...")
+
             if api_key:
                 # Validate provided key
+                logger.info("Using provided API key")
                 if not api_key_manager.validate_api_key_format(api_key, "groq"):
                     raise APIKeySecurityError("Invalid Groq API key format provided")
                 self.api_key = api_key
                 logger.info(f"Using provided Groq API key: {api_key_manager.mask_api_key(api_key)}")
             else:
                 # Get key from environment with validation
+                logger.info("Getting API key from environment...")
                 self.api_key = api_key_manager.get_secure_key("GROQ_API_KEY")
                 logger.info(f"Using Groq API key from environment: {api_key_manager.mask_api_key(self.api_key)}")
 
+            # Initialize Groq client
+            logger.info("Creating Groq client instance...")
             self.client = Groq(api_key=self.api_key)
             self.is_configured = True
+            logger.info("✅ Groq client initialized successfully")
 
         except APIKeySecurityError as e:
-            logger.error(f"Groq API key security error: {e}")
+            logger.error(f"❌ Groq API key security error: {e}")
             self.api_key = None
             self.client = None
             self.is_configured = False
             # Don't raise here to allow graceful degradation
         except Exception as e:
-            logger.error(f"Failed to initialize Groq client: {e}")
+            logger.error(f"❌ Failed to initialize Groq client: {e}")
+            logger.error(f"Exception type: {type(e).__name__}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
             self.api_key = None
             self.client = None
             self.is_configured = False
