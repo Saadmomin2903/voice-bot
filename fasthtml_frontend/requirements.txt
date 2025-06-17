@@ -1,0 +1,19 @@
+# FastHTML Voice Bot Frontend Requirements
+
+# Core FastHTML framework
+python-fasthtml>=0.2.0
+
+# HTTP client for API communication
+httpx>=0.25.0
+
+# WebSocket support
+websockets>=11.0
+
+# Async utilities
+asyncio-mqtt>=0.13.0
+
+# Development and debugging
+uvicorn>=0.23.0
+
+# Optional: For enhanced logging
+structlog>=23.0.0

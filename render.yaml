@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: voice-bot
+    env: python
+    plan: starter # Free tier, upgrade to starter ($7/month) for production
+    buildCommand: |
+      # Install backend dependencies
+      cd backend && pip install -r requirements.txt
+      # Install frontend dependencies  
+      cd ../fasthtml_frontend && pip install -r requirements.txt
+    startCommand: |
+      # Start both services using simplified startup
+      python start_render.py
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false # Set this in Render dashboard
+      - key: USE_HTTPS
+        value: "true"
+      - key: USE_SSL
+        value: "true"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "10000" # Render's default port
+      - key: FRONTEND_PORT
+        value: "8504"
+      - key: BACKEND_PORT
+        value: "8000"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: FRONTEND_URL
+        value: "https://voice-bot.onrender.com" # Replace with your actual URL
+    healthCheckPath: /health
