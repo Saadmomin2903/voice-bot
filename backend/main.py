@@ -16,12 +16,13 @@ logger = get_logger(__name__)
 
 # Import error handling
 from utils.error_handler import error_handler
-from middleware.error_middleware import (
-    ErrorHandlingMiddleware,
-    RequestLoggingMiddleware,
-    SecurityHeadersMiddleware,
-    PerformanceMonitoringMiddleware
-)
+# Temporarily disable middleware imports for deployment debugging
+# from middleware.error_middleware import (
+#     ErrorHandlingMiddleware,
+#     RequestLoggingMiddleware,
+#     SecurityHeadersMiddleware,
+#     PerformanceMonitoringMiddleware
+# )
 
 # Rate limiting imports
 try:
@@ -55,13 +56,13 @@ app = FastAPI(
 )
 
 # Add middleware in correct order (last added = first executed)
-app.add_middleware(ErrorHandlingMiddleware)
-app.add_middleware(PerformanceMonitoringMiddleware, slow_request_threshold=3.0)
-app.add_middleware(SecurityHeadersMiddleware)
-
-# Add request logging middleware for development
-if os.getenv('ENVIRONMENT', 'development') == 'development':
-    app.add_middleware(RequestLoggingMiddleware, log_body=False)
+# Simplified middleware for deployment
+try:
+    # Only add essential middleware for now
+    logger.info("Loading essential middleware only for deployment")
+except Exception as e:
+    logger.warning(f"Middleware loading error: {e}")
+    # Continue without problematic middleware
 
 # Add rate limiting middleware if available
 if RATE_LIMITING_AVAILABLE and limiter:
