@@ -56,9 +56,7 @@ def start_backend():
         sys.executable, "-m", "uvicorn", "main_clean:app",
         "--host", "127.0.0.1",
         "--port", str(BACKEND_PORT),
-        "--workers", "1",
-        "--proxy-headers", "false",
-        "--forwarded-allow-ips", ""
+        "--workers", "1"
     ]
 
     process = subprocess.Popen(cmd, env=env)

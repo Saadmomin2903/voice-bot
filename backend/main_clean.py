@@ -1,11 +1,25 @@
 """
-Ultra-clean FastAPI backend - Absolute minimum configuration
+Clean FastAPI backend - Fixed dependency conflicts
 """
 import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
-# Create the most basic FastAPI app possible
-app = FastAPI()
+# Load environment variables
+load_dotenv()
+
+# Create FastAPI app
+app = FastAPI(title="Voice Bot Clean API")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
