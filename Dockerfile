@@ -34,7 +34,7 @@ RUN mkdir -p /app/ssl_certs
 COPY ssl_certs/ /app/ssl_certs/
 
 # Make startup script executable
-RUN chmod +x /app/start_combined.py
+RUN chmod +x /app/start_render_simple.py
 
 # Expose port
 EXPOSE 10000
@@ -44,4 +44,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:10000/health || exit 1
 
 # Start the application
-CMD ["python", "start_combined.py"]
+CMD ["python", "start_render_simple.py"]
