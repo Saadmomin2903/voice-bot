@@ -8,18 +8,16 @@ services:
       pip install -r backend/requirements.txt
       # Install frontend dependencies
       pip install -r fasthtml_frontend/requirements.txt
-      # Install additional dependencies for startup script
-      pip install aiohttp requests
     startCommand: |
-      # Start both services using simplified startup
-      python start_render.py
+      # Start both services using simplified startup (no SSL/proxy issues)
+      python start_render_simple.py
     envVars:
       - key: GROQ_API_KEY
         sync: false # Set this in Render dashboard
       - key: USE_HTTPS
-        value: "true"
+        value: "false"
       - key: USE_SSL
-        value: "true"
+        value: "false"
       - key: HOST
         value: "0.0.0.0"
       - key: PORT
