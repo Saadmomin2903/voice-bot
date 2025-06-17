@@ -28,9 +28,24 @@ def root():
 def health():
     """Basic health check"""
     return jsonify({
-        "status": "healthy", 
+        "status": "healthy",
         "message": "Flask API is running",
-        "framework": "flask"
+        "framework": "flask",
+        "endpoints_available": [
+            "/",
+            "/health",
+            "/config"
+        ]
+    })
+
+@app.route("/config")
+def config():
+    """Basic configuration endpoint"""
+    return jsonify({
+        "framework": "flask",
+        "version": "1.0.0",
+        "status": "temporary_fallback",
+        "message": "Using Flask as temporary fallback due to FastAPI middleware issues"
     })
 
 if __name__ == "__main__":

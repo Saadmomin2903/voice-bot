@@ -35,15 +35,8 @@ def start_backend():
     backend_dir = Path(__file__).parent / "backend"
     os.chdir(backend_dir)
 
-    # First run the FastAPI test
-    print("🔍 Running FastAPI compatibility test...")
-    test_cmd = [sys.executable, "test_fastapi.py"]
-    test_result = subprocess.run(test_cmd, capture_output=True, text=True)
-    print("Test output:")
-    print(test_result.stdout)
-    if test_result.stderr:
-        print("Test errors:")
-        print(test_result.stderr)
+    # Using Flask backend to avoid FastAPI middleware issues
+    print("🔄 Starting Flask backend to bypass FastAPI middleware issues...")
 
     # Set environment for backend (disable SSL for internal communication)
     env = os.environ.copy()
@@ -53,10 +46,7 @@ def start_backend():
     env["USE_HTTPS"] = "false"
 
     cmd = [
-        sys.executable, "-m", "uvicorn", "main_clean:app",
-        "--host", "127.0.0.1",
-        "--port", str(BACKEND_PORT),
-        "--workers", "1"
+        sys.executable, "main_flask.py"
     ]
 
     process = subprocess.Popen(cmd, env=env)
