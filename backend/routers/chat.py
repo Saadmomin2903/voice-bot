@@ -12,7 +12,8 @@ from utils.validation import (
 )
 from utils.logging_config import get_logger
 from utils.error_handler import ErrorCategory, ErrorSeverity
-from utils.performance_optimizer import async_timed, memory_efficient, performance_monitor, memory_manager
+# Temporarily disable performance optimizer imports for deployment debugging
+# from utils.performance_optimizer import async_timed, memory_efficient, performance_monitor, memory_manager
 import json
 
 logger = get_logger(__name__)
@@ -72,8 +73,9 @@ class ChatResponse(BaseModel):
     timestamp: Optional[str] = Field(None, description="Response timestamp")
 
 @router.post("/text", response_model=ChatResponse)
-@async_timed(performance_monitor)
-@memory_efficient(memory_manager)
+# Temporarily disable performance decorators for deployment debugging
+# @async_timed(performance_monitor)
+# @memory_efficient(memory_manager)
 async def chat_text(request: ChatRequest):
     """
     Process text-based chat message using Groq Chat API with performance optimization

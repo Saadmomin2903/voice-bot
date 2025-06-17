@@ -1,55 +1,67 @@
 """
-Minimal FastAPI backend for Voice Bot application - Deployment Version
-Simplified version to resolve middleware compatibility issues
+Ultra-minimal FastAPI backend for Voice Bot application - Deployment Debug Version
+Stripped down to absolute basics to resolve middleware compatibility issues
 """
 import os
 from datetime import datetime
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Import routers
-from routers import chat, voice, websocket
-
-# Create FastAPI app
+# Create FastAPI app with minimal configuration
 app = FastAPI(
     title="Voice Bot API",
     description="FastAPI backend for voice-enabled chatbot using Groq APIs",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    version="1.0.0"
 )
 
-# Simple CORS middleware for frontend integration
-ALLOWED_ORIGINS = [
-    "http://localhost:8504",  # FastHTML frontend
-    "http://127.0.0.1:8504",  # Alternative localhost
-    "https://localhost:8504",  # HTTPS FastHTML frontend
-    "https://127.0.0.1:8504",  # HTTPS Alternative localhost
-    "*"  # Allow all origins for deployment (temporary)
-]
-
-# Add environment-specific origins
-if os.getenv("FRONTEND_URL"):
-    ALLOWED_ORIGINS.append(os.getenv("FRONTEND_URL"))
-
+# Minimal CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["*"],  # Allow all origins for debugging
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(chat.router)
-app.include_router(voice.router)
-app.include_router(websocket.router)
+# Import and include routers AFTER app creation and middleware setup
+# Load routers one by one to identify which one causes the middleware issue
+try:
+    print("🔄 Loading chat router...")
+    from routers import chat
+    print("🔄 Including chat router...")
+    app.include_router(chat.router)
+    print("✅ Chat router loaded successfully")
+except Exception as e:
+    print(f"❌ Error loading chat router: {e}")
+    import traceback
+    traceback.print_exc()
+
+try:
+    print("🔄 Loading voice router...")
+    from routers import voice
+    print("🔄 Including voice router...")
+    app.include_router(voice.router)
+    print("✅ Voice router loaded successfully")
+except Exception as e:
+    print(f"❌ Error loading voice router: {e}")
+    import traceback
+    traceback.print_exc()
+
+try:
+    print("🔄 Loading websocket router...")
+    from routers import websocket
+    print("🔄 Including websocket router...")
+    app.include_router(websocket.router)
+    print("✅ WebSocket router loaded successfully")
+except Exception as e:
+    print(f"❌ Error loading websocket router: {e}")
+    import traceback
+    traceback.print_exc()
 
 @app.get("/")
 async def root():
