@@ -30,8 +30,8 @@ COPY . /app/
 # Create SSL certificates directory
 RUN mkdir -p /app/ssl_certs
 
-# Copy SSL certificates (if they exist)
-COPY ssl_certs/ /app/ssl_certs/ 2>/dev/null || true
+# Copy SSL certificates (only .gitkeep file exists in repo)
+COPY ssl_certs/ /app/ssl_certs/
 
 # Make startup script executable
 RUN chmod +x /app/start_combined.py

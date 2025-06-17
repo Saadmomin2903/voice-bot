@@ -27,3 +27,7 @@ python-json-logger==2.0.7
 
 # Performance monitoring dependencies
 psutil==5.9.6
+
+# Additional dependencies for deployment
+requests==2.31.0
+aiohttp==3.9.1

@@ -5,9 +5,11 @@ services:
     plan: starter # Free tier, upgrade to starter ($7/month) for production
     buildCommand: |
       # Install backend dependencies
-      cd backend && pip install -r requirements.txt
-      # Install frontend dependencies  
-      cd ../fasthtml_frontend && pip install -r requirements.txt
+      pip install -r backend/requirements.txt
+      # Install frontend dependencies
+      pip install -r fasthtml_frontend/requirements.txt
+      # Install additional dependencies for startup script
+      pip install aiohttp requests
     startCommand: |
       # Start both services using simplified startup
       python start_render.py
