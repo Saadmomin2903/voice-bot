@@ -9,7 +9,7 @@ services:
       # Install frontend dependencies
       pip install -r fasthtml_frontend/requirements.txt
     startCommand: |
-      # Start both services using simplified startup (no SSL/proxy issues)
+      # Start both services using simplified startup script (v2 - no SSL/proxy issues)
       python start_render_simple.py
     envVars:
       - key: GROQ_API_KEY

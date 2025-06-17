@@ -104,11 +104,15 @@ def wait_for_backend():
 
 def main():
     """Main startup function"""
-    print("🎤 Voice Bot - Render Deployment (Simplified)")
+    print("🎤 Voice Bot - Render Deployment (Simplified v2)")
+    print("🔧 Using start_render_simple.py (NOT start_combined.py)")
     print(f"Render Port: {RENDER_PORT}")
     print(f"Backend Port: {BACKEND_PORT}")
     print(f"Host: {HOST}")
     print("SSL: Handled by Render (disabled internally)")
+    print("Environment Variables:")
+    print(f"  USE_SSL: {os.getenv('USE_SSL', 'not set')}")
+    print(f"  USE_HTTPS: {os.getenv('USE_HTTPS', 'not set')}")
     
     # Set up signal handlers
     signal.signal(signal.SIGTERM, signal_handler)
