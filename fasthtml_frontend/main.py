@@ -55,10 +55,13 @@ def get():
     """Main voice bot interface"""
     return Titled("AI Voice Assistant",
         Div(
-            # Header
+            # Compact Header
             Header(
-                H1("AI Voice Assistant", cls="header-title"),
-                P("Real-time voice conversations with AI", cls="header-subtitle"),
+                Div(
+                    Span("🤖", cls="header-icon"),
+                    Span("AI Voice Assistant", cls="header-title"),
+                    cls="header-content"
+                ),
                 cls="app-header"
             ),
             
